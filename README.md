@@ -1,0 +1,1 @@
+# blog_for_technologies_for_creating_internet_applications
