@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="content-card post-detail">
+
+    <a href="{% url 'home' %}" class="back-link">← Назад на главную</a>
+
+    <h2>{{ post.title }}</h2>
+
+    <img src="{% static 'blog/img/post_cover.jpg' %}"
+         alt="Иллюстрация поста"
+         class="post-image">
+
+    {% for paragraph in post.content.splitlines %}
+        <p>{{ paragraph }}</p>
+    {% endfor %}
+
+</div>
+{% endblock %}
