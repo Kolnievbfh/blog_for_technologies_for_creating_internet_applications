@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import Http404
 
+from .models import Review          # 👈 добавили
+from .forms import ReviewForm       # 👈 добавили
+
 # "База данных" из двух постов
 POSTS = [
     {
@@ -42,7 +45,6 @@ POSTS = [
 ]
 
 
-
 def home(request):
     return render(request, 'blog/home.html', {"posts": POSTS})
 
@@ -58,3 +60,22 @@ def post_detail(request, post_id):
         raise Http404("Пост не найден")
 
     return render(request, 'blog/post_detail.html', {"post": post})
+
+
+def reviews(request):
+    # берём только проверенные отзывы
+    reviews_qs = Review.objects.filter(checked=True).order_by('-id')
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            form.save()      # сохраняем новый отзыв (checked=False по умолчанию)
+            form = ReviewForm()  # очищаем форму после успешной отправки
+    else:
+        form = ReviewForm()
+
+    context = {
+        "reviews": reviews_qs,
+        "form": form,
+    }
+    return render(request, "blog/reviews.html", context)
