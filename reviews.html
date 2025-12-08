@@ -1,0 +1,44 @@
+{% extends "blog/base.html" %}
+{% block title %}Отзывы{% endblock %}
+
+{% block content %}
+<div class="content-card">
+    <h2>Отзывы</h2>
+
+    <h3>Оставить отзыв</h3>
+    <form method="POST" class="review-form">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="form-field">
+                {{ form.full_name.label_tag }}
+                {{ form.full_name }}
+            </div>
+            <div class="form-field">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+        </div>
+
+        <div class="form-field">
+            {{ form.text.label_tag }}
+            {{ form.text }}
+        </div>
+
+        <button type="submit" class="btn-primary">Отправить</button>
+    </form>
+
+    <hr>
+
+    <h3>Проверенные отзывы</h3>
+    {% for r in reviews %}
+        <div class="review-item">
+            <strong>{{ r.full_name }}</strong>
+            <p class="review-email">{{ r.email }}</p>
+            <p>{{ r.text }}</p>
+        </div>
+    {% empty %}
+        <p>Пока нет проверенных отзывов.</p>
+    {% endfor %}
+</div>
+{% endblock %}
